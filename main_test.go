@@ -1,6 +1,7 @@
 package main
 
 import (
+	"regexp"
 	"slices"
 	"testing"
 )
@@ -31,7 +32,7 @@ func TestMoveSkipsHeaders(t *testing.T) {
 
 func TestBars(t *testing.T) {
 	for signal, want := range map[int]string{0: "▂___", 30: "▂▄__", 75: "▂▄▆_", 100: "▂▄▆█"} {
-		if got := bars(signal); got != want {
+		if got := regexp.MustCompile(`\x1b\[\d+m`).ReplaceAllString(bars(signal), ""); got != want {
 			t.Errorf("bars(%d) = %q, want %q", signal, got, want)
 		}
 	}
